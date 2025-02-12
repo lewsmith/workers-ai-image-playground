@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Workers AI Image Playground",
+  title: "CF Workers AI Image Gen Example",
   description: "Playground for generating images with Cloudflare Workers AI models",
 };
 
