@@ -35,7 +35,7 @@ const cloudflareLoader = ({
     params.push(`quality=${quality}`);
   }
   const paramsString = params.join(",");
-  return `/cdn-cgi/image/${paramsString}/${normalizeSrc(src)}`;
+  return `/cdn-cgi/image/${paramsString}/api/image?key=${normalizeSrc(src)}`;
 };
 
 export default function Images() {
