@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
 
     const inputs = { prompt };
     const response = await AI.run(model, inputs);
+    const maxLength = 100;
 
     const promptKey = encodeURIComponent(
       prompt
@@ -25,21 +26,18 @@ export async function POST(request: NextRequest) {
         .replace(/\s+/g, "-")
         .toLowerCase(),
     );
-    console.log(`Saving image with key: ${promptKey}`);
-    //    const binaryString = atob(response.image);
+    const binaryString = atob(response.image);
 
     // @ts-ignore
-    //  const img = Uint8Array.from(binaryString, (m) => m.codePointAt(0));
+    const img = Uint8Array.from(binaryString, (m) => m.codePointAt(0));
 
-    const binaryString = atob(response.image);
-    const img = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-      img[i] = binaryString.charCodeAt(i);
-    }
-
-    await BUCKET.put(`${promptKey}.jpeg`, img, {
-      httpMetadata: { contentType: "image/jpeg" },
-    });
+    await BUCKET.put(
+      `${promptKey.length > maxLength ? promptKey.slice(0, maxLength) : promptKey}.jpeg`,
+      img,
+      {
+        httpMetadata: { contentType: "image/jpeg" },
+      },
+    );
 
     return new Response(`data:image/jpeg;base64,${response.image}`, {
       headers: {
