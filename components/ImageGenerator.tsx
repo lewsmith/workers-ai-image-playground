@@ -225,6 +225,7 @@ export default function SimpleImageGenerator() {
               className="w-full h-auto rounded-lg shadow-lg mb-4"
               width={512}
               height={512}
+              loader={({src}) => src}
             />
             <Button onClick={handleDownload} className="mt-4">
               <Download className="mr-2 h-4 w-4" /> Download Image
