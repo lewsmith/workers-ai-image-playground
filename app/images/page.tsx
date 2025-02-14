@@ -11,7 +11,7 @@ type R2Image = {
 };
 
 const imageLoader = ({ src }: { src: string }) => {
-  return `/api/image?key=${src}`;
+  return `/cdn-cgi/image/width=360,quality=75/api/image?key=${src}`;
 };
 
 export default function Images() {
@@ -39,7 +39,7 @@ export default function Images() {
         <div className="p-4 flex flex-col gap-4">
           {!images || (!images.length && <span>No images yet.</span>)}
 
-          <div className="grid grid-cols-3 gap-2 max-w-screen-lg">
+          <div className="grid grid-cols-4 gap-2 max-w-screen-xl">
             {images.map((image) => (
               <div className="space-y-2" key={image.key}>
                 <Image
