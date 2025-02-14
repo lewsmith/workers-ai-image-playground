@@ -14,6 +14,30 @@ const imageLoader = ({ src }: { src: string }) => {
   return `/cdn-cgi/image/width=360,quality=75/api/image?key=${src}`;
 };
 
+const normalizeSrc = (src: string) => {
+  return src.startsWith("/") ? src.slice(1) : src;
+};
+
+const cloudflareLoader = ({
+  src,
+  width,
+  quality,
+}: {
+  src: string;
+  width: number;
+  quality?: number;
+}) => {
+  if (process.env.NODE_ENV === "development") {
+    return src;
+  }
+  const params = [`width=${width}`];
+  if (quality) {
+    params.push(`quality=${quality}`);
+  }
+  const paramsString = params.join(",");
+  return `/cdn-cgi/image/${paramsString}/${normalizeSrc(src)}`;
+};
+
 export default function Images() {
   const [images, setImages] = useState<R2Image[]>([]);
 
@@ -43,11 +67,12 @@ export default function Images() {
             {images.map((image) => (
               <div className="space-y-2" key={image.key}>
                 <Image
-                  loader={imageLoader}
+                  loader={cloudflareLoader}
                   src={image.key}
-                  width={256}
-                  height={256}
+                  width={360}
+                  height={360}
                   alt={image.key}
+                  quality={75}
                 />
                 <p className="text-sm truncate">{image.key}</p>
               </div>
